@@ -5,38 +5,12 @@ Lambda Calculus through JavaScript
 Siver K. Volle
 2014
 
+Includes a couple of modules, control panel, visualizer
+and other unimportant pieces. For the converter by itself
+try 'lambda-simple.js', or create it yourself from the
+function λ and the following five definitions.
+
 **/
-
-
-// A standalone evaluator.
-function λCalculus(calculus){
-    var nextLambda = calculus.search(/[#λ\\]/)
-    if(nextLambda == 0){
-        var delim = calculus.search(/[.:]/);
-        if(!~delim) throw Error("Missing body delimiter");
-        var head = calculus.slice(1,delim)  
-                           .split(/[^a-zA-Z0-9]+[0-9]*/);
-        var body = λCalculus(calculus.slice(delim+1))
-        var func = "#2#"
-        for(var i in head){
-            func = func.replace(/#2#/,
-                   "function anonymous(#1#){ return #2#; }"
-                   .replace(/#1#/,head[i]));
-        }
-        return func.replace(/#2#/,body);
-    } else if(nextLambda > 0){
-        var left = 1;
-        var i = nextLambda;
-        while(left>0&&++i<calculus.length){
-            if(calculus[i] == "(") left++;
-            else if(calculus[i] == ")") left--;
-        }
-        return calculus.slice(0,nextLambda)
-             + λCalculus(calculus.slice(nextLambda,i))
-             + λCalculus(calculus.slice(i));
-    }
-    return calculus
-}
 
 function λ(calculus){
     var nextLambda = calculus.search(λ.lambdaDelim)
